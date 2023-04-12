@@ -10,6 +10,7 @@
 
 __webpack_require__.r(__webpack_exports__);
 const modals = () => {
+  let isBtnPressed = false;
   function bindModal(triggerSelector, modalSelector, closeSelector) {
     let destroy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     const trigger = document.querySelectorAll(triggerSelector),
@@ -22,6 +23,7 @@ const modals = () => {
         if (e.target) {
           e.preventDefault();
         }
+        isBtnPressed = true;
         if (destroy) {
           triggerItem.remove();
         }
@@ -79,9 +81,19 @@ const modals = () => {
     div.remove();
     return scrollWidth;
   }
+  function openModalByScroll(selector) {
+    window.addEventListener('scroll', () => {
+      let scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+      if (!isBtnPressed && window.pageYOffset + document.documentElement.clientHeight >= scrollHeight) {
+        document.querySelector(selector).click();
+      }
+    });
+  }
   bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
   bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-  showModalByTime('.popup-consultation', 5000);
+  bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+  openModalByScroll('.fixed-gift');
+  showModalByTime('.popup-consultation', 60000);
 };
 /* harmony default export */ __webpack_exports__["default"] = (modals);
 
