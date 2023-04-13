@@ -42,6 +42,19 @@ const sliders = (slides, dir, prev, next) => {
 			items[slideIndex - 1].classList.add('slideInLeft');
 		});
 	} catch (error) {}
+
+	if (dir === 'vertical') {
+		setInterval(() => {
+			plusSlides(1);
+			items[slideIndex - 1].classList.add('slideInDown');
+		}, 4000);
+	} else {
+		setInterval(() => {
+			plusSlides(1);
+			items[slideIndex - 1].classList.remove('slideInRight');
+			items[slideIndex - 1].classList.add('slideInLeft');
+		}, 4000);
+	}
 };
 
 export default sliders;

@@ -141,6 +141,18 @@ const sliders = (slides, dir, prev, next) => {
       items[slideIndex - 1].classList.add('slideInLeft');
     });
   } catch (error) {}
+  if (dir === 'vertical') {
+    setInterval(() => {
+      plusSlides(1);
+      items[slideIndex - 1].classList.add('slideInDown');
+    }, 4000);
+  } else {
+    setInterval(() => {
+      plusSlides(1);
+      items[slideIndex - 1].classList.remove('slideInRight');
+      items[slideIndex - 1].classList.add('slideInLeft');
+    }, 4000);
+  }
 };
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
 
@@ -200,7 +212,8 @@ window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   (0,_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
-  (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', '', '.main-prev-btn', '.main-next-btn');
+  (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
+  (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
 });
 }();
 /******/ })()
