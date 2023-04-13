@@ -109,6 +109,7 @@ const modals = () => {
 __webpack_require__.r(__webpack_exports__);
 const sliders = (slides, dir, prev, next) => {
   let slideIndex = 1;
+  let paused = false;
   const items = document.querySelectorAll(slides);
   function showSlides(n) {
     if (n > items.length) {
@@ -141,18 +142,27 @@ const sliders = (slides, dir, prev, next) => {
       items[slideIndex - 1].classList.add('slideInLeft');
     });
   } catch (error) {}
-  if (dir === 'vertical') {
-    setInterval(() => {
-      plusSlides(1);
-      items[slideIndex - 1].classList.add('slideInDown');
-    }, 4000);
-  } else {
-    setInterval(() => {
-      plusSlides(1);
-      items[slideIndex - 1].classList.remove('slideInRight');
-      items[slideIndex - 1].classList.add('slideInLeft');
-    }, 4000);
+  function activateAnimation() {
+    if (dir === 'vertical') {
+      paused = setInterval(() => {
+        plusSlides(1);
+        items[slideIndex - 1].classList.add('slideInDown');
+      }, 4000);
+    } else {
+      paused = setInterval(() => {
+        plusSlides(1);
+        items[slideIndex - 1].classList.remove('slideInRight');
+        items[slideIndex - 1].classList.add('slideInLeft');
+      }, 4000);
+    }
   }
+  activateAnimation();
+  items[0].parentNode.addEventListener('mouseenter', () => {
+    clearInterval(paused);
+  });
+  items[0].parentNode.addEventListener('mouseleave', () => {
+    activateAnimation();
+  });
 };
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
 
