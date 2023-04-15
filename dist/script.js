@@ -30,15 +30,12 @@ const checkTextInputs = selector => {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-// import checkNumberInputs from './checkNumberInputs';
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
 
 const forms = () => {
   const formes = document.querySelectorAll('form'),
     inputs = document.querySelectorAll('input'),
     upload = document.querySelectorAll('[name="upload"]');
-
-  // checkNumberInputs('input[name="user_phone"]');
-
   const message = {
     loading: 'Загрузка...',
     success: 'Спасибо! Мы скоро с вами свяжемся',
@@ -50,13 +47,6 @@ const forms = () => {
   const path = {
     designer: 'assets/server.php',
     question: 'assets/question.php'
-  };
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: 'POST',
-      body: data
-    });
-    return await res.text();
   };
   const clearInputs = () => {
     inputs.forEach(input => {
@@ -96,7 +86,7 @@ const forms = () => {
       const formData = new FormData(form);
       let api;
       form.closest('.popup-design') || form.classList.contains('calc_form') ? api = path.designer : path.question;
-      postData(api, formData).then(res => {
+      (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(api, formData).then(res => {
         statusImg.setAttribute('src', message.ok);
         textMessage.textContent = message.success;
       }).catch(() => {
@@ -273,20 +263,58 @@ const modals = () => {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 __webpack_require__.r(__webpack_exports__);
-const showMoreStyles = (trigger, styles) => {
-  const cards = document.querySelectorAll(styles),
-    btn = document.querySelector(trigger);
-  cards.forEach(card => {
-    card.classList.add('animated', 'fadeInUp');
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+const showMoreStyles = (trigger, wrapper) => {
+  const btn = document.querySelector(trigger);
+  btn.addEventListener('click', function () {
+    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResource)('assets/db.json').then(res => createCards(res.styles)).catch(error => console.log(error));
+    this.remove();
   });
-  btn.addEventListener('click', () => {
-    cards.forEach(card => {
-      card.classList.remove('hidden-lg', 'hidden-mg', 'hidden-sm', 'hidden-xs');
-      card.classList.add('col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+  function createCards(response) {
+    response.forEach(_ref => {
+      let {
+        src,
+        title,
+        link
+      } = _ref;
+      let card = document.createElement('div');
+      card.classList.add('animated', 'fadeInUp', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+      card.innerHTML = `
+				<div class="styles-block">
+					<img src=${src} alt="style">
+					<h4>${title}</h4>
+			 		<a href=${link}>Подробнее</a>
+				</div>
+			`;
+      document.querySelector(wrapper).appendChild(card);
     });
-    btn.remove();
-  });
+  }
+
+  // функционал подгрузки из вёрстки
+
+  // <div class="hidden-lg hidden-md hidden-sm hidden-xs styles-2">
+  // 	<div class=styles-block>
+  // 		<img src=assets/img/styles-5.jpg alt>
+  // 		<h4>Пастелью</h4>
+  // 		<a href="#">Подробнее</a>
+  // 	</div>
+  // </div>
+
+  // cards.forEach((card) => {
+  // 	card.classList.add('animated', 'fadeInUp');
+  // });
+
+  // btn.addEventListener('click', () => {
+  // 	cards.forEach((card) => {
+  // 		card.classList.remove('hidden-lg', 'hidden-mg', 'hidden-sm', 'hidden-xs');
+  // 		card.classList.add('col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+  // 	});
+
+  // 	btn.remove();
+  // });
 };
+
 /* harmony default export */ __webpack_exports__["default"] = (showMoreStyles);
 
 /***/ }),
@@ -357,6 +385,35 @@ const sliders = (slides, dir, prev, next) => {
 };
 /* harmony default export */ __webpack_exports__["default"] = (sliders);
 
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getResource": function() { return /* binding */ getResource; },
+/* harmony export */   "postData": function() { return /* binding */ postData; }
+/* harmony export */ });
+const postData = async (url, data) => {
+  let res = await fetch(url, {
+    method: 'POST',
+    body: data
+  });
+  return await res.text();
+};
+const getResource = async url => {
+  let res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+  }
+  return await res.json();
+};
+
+
 /***/ })
 
 /******/ 	});
@@ -386,6 +443,23 @@ const sliders = (slides, dir, prev, next) => {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	!function() {
 /******/ 		// define __esModule on exports
@@ -427,7 +501,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
-  (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '.styles-2');
+  (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
 });
 }();
 /******/ })()
