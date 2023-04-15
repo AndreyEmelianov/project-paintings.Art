@@ -531,6 +531,22 @@ h4 {
 }
 .calc #size {
 	margin-top: 3rem;
+	cursor: pointer;
+}
+.calc #size:hover {
+	transform: scale(103%);
+}
+.calc #material {
+	cursor: pointer;
+}
+.calc #material:hover {
+	transform: scale(103%);
+}
+.calc #options {
+	cursor: pointer;
+}
+.calc #options:hover {
+	transform: scale(103%);
 }
 .calc-price {
 	background-color: #f7e7e6;

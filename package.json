@@ -1,12 +1,12 @@
 {
 	"name": "picture",
 	"version": "1.0.0",
+	"author": "Andrey Emelianov",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "",
 	"license": "ISC",
 	"browserslist": [
 		"> 1%",
