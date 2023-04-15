@@ -13,7 +13,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const forms = () => {
   const formes = document.querySelectorAll('form'),
-    inputs = document.querySelectorAll('input');
+    inputs = document.querySelectorAll('input'),
+    upload = document.querySelectorAll('[name="upload"]');
 
   // checkNumberInputs('input[name="user_phone"]');
 
@@ -40,7 +41,20 @@ const forms = () => {
     inputs.forEach(input => {
       input.value = '';
     });
+    upload.forEach(item => {
+      item.previousElementSibling.textContent = 'Файл не выбран';
+    });
   };
+  upload.forEach(item => {
+    item.addEventListener('input', () => {
+      console.log(item.files[0]);
+      let dots;
+      const arr = item.files[0].name.split('.');
+      arr[0].length > 6 ? dots = '...' : dots = '.';
+      const name = arr[0].substring(0, 6) + dots + arr[1];
+      item.previousElementSibling.textContent = name;
+    });
+  });
   formes.forEach(form => {
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -60,7 +74,7 @@ const forms = () => {
       statusMessage.appendChild(textMessage);
       const formData = new FormData(form);
       let api;
-      form.closest('.popup-design') ? api = path.designer : path.question;
+      form.closest('.popup-design') || form.classList.contains('calc_form') ? api = path.designer : path.question;
       postData(api, formData).then(res => {
         statusImg.setAttribute('src', message.ok);
         textMessage.textContent = message.success;
@@ -71,6 +85,9 @@ const forms = () => {
         clearInputs();
         setTimeout(() => {
           statusMessage.remove();
+          form.style.display = 'block';
+          form.classList.remove('fadeOutUp');
+          form.classList.add('fadeInUp');
         }, 5000);
       });
     });
