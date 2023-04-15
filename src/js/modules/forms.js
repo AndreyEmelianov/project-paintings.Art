@@ -1,4 +1,4 @@
-import checkNumberInputs from './checkNumberInputs';
+// import checkNumberInputs from './checkNumberInputs';
 
 const forms = () => {
 	const formes = document.querySelectorAll('form'),
@@ -58,18 +58,18 @@ const forms = () => {
 			statusMessage.appendChild(textMessage);
 
 			const formData = new FormData(form);
-			if (form.getAttribute('data-calc') === 'end') {
-				for (let key in state) {
-					formData.append(key, state[key]);
-				}
-			}
+			let api;
 
-			postData('assets/server.php', formData)
+			form.closest('.popup-design') ? (api = path.designer) : path.question;
+
+			postData(api, formData)
 				.then((res) => {
-					statusMessage.textContent = message.success;
+					statusImg.setAttribute('src', message.ok);
+					textMessage.textContent = message.success;
 				})
 				.catch(() => {
-					statusMessage.textContent = message.failure;
+					statusImg.setAttribute('src', message.fail);
+					textMessage.textContent = message.failure;
 				})
 				.finally(() => {
 					clearInputs();
